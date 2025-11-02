@@ -11,12 +11,13 @@ const tipos = [
 const container = document.getElementById("tipos");
 const melhorDiv = document.getElementById("melhor");
 const resultados = {};
+const precosSalvos = JSON.parse(localStorage.getItem("precosCerveja")) || {};
 
-// Cria campos dinamicamente
+// Criação dos campos
 tipos.forEach((t, i) => {
   const div = document.createElement("div");
   div.className = "item";
-  div.setAttribute("id", `item-${i}`);
+  div.id = `item-${i}`;
   div.innerHTML = `
     <label>${t.nome}</label>
     <input type="number" id="preco-${i}" placeholder="R$" min="0" step="0.01">
@@ -25,7 +26,16 @@ tipos.forEach((t, i) => {
   container.appendChild(div);
 
   const input = div.querySelector("input");
-  input.addEventListener("input", () => calcular(i));
+
+  if (precosSalvos[t.nome]) {
+    input.value = precosSalvos[t.nome];
+    calcular(i);
+  }
+
+  input.addEventListener("input", () => {
+    calcular(i);
+    salvarPrecos();
+  });
 });
 
 function calcular(i) {
@@ -47,7 +57,6 @@ function calcular(i) {
   const litro = (preco / (tipo.ml / 1000)).toFixed(2);
   resultados[tipo.nome] = parseFloat(litro);
   resDiv.textContent = `Preço por litro: R$ ${litro}`;
-
   mostrarMelhor();
 }
 
@@ -64,19 +73,37 @@ function mostrarMelhor() {
 
   melhorDiv.textContent = `💰 A mais em conta é: ${menor} (R$ ${resultados[menor].toFixed(2)}/L)`;
 
-  // Remove destaque anterior
   document.querySelectorAll(".item").forEach(el => el.classList.remove("melhor-opcao"));
-
-  // Adiciona destaque animado ao item vencedor
   const index = tipos.findIndex(t => t.nome === menor);
-  const melhorItem = document.getElementById(`item-${index}`);
-  if (melhorItem) melhorItem.classList.add("melhor-opcao");
+  document.getElementById(`item-${index}`).classList.add("melhor-opcao");
 }
+
+/* ======= Salvar e Limpar ======= */
+function salvarPrecos() {
+  const precos = {};
+  tipos.forEach((t, i) => {
+    const valor = document.getElementById(`preco-${i}`).value;
+    if (valor) precos[t.nome] = valor;
+  });
+  localStorage.setItem("precosCerveja", JSON.stringify(precos));
+}
+
+document.getElementById("btn-limpar").addEventListener("click", () => {
+  if (confirm("Tem certeza que deseja limpar todos os preços?")) {
+    tipos.forEach((_, i) => {
+      document.getElementById(`preco-${i}`).value = "";
+      document.getElementById(`res-${i}`).textContent = "";
+      document.getElementById(`item-${i}`).classList.remove("melhor-opcao");
+    });
+    melhorDiv.textContent = "";
+    localStorage.removeItem("precosCerveja");
+    for (const k in resultados) delete resultados[k];
+  }
+});
 
 /* ======= Alternância de tema ======= */
 const btnTema = document.getElementById("toggle-theme");
 
-// Verifica se há tema salvo
 if (localStorage.getItem("tema") === "escuro") {
   document.body.classList.add("dark");
   btnTema.textContent = "☀️";
