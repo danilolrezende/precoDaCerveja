@@ -1,0 +1,137 @@
+/* ======= Estilos base ======= */
+:root {
+  --bg: #fffbe6;
+  --card-bg: #fff;
+  --text: #333;
+  --header-bg: #ffcc00;
+  --highlight: #e0ffe0;
+  --button-bg: #ffcc00;
+  --button-hover: #ffb300;
+}
+
+/* ======= Tema escuro ======= */
+body.dark {
+  --bg: #1c1c1c;
+  --card-bg: #2a2a2a;
+  --text: #f0f0f0;
+  --header-bg: #333;
+  --highlight: #335533;
+  --button-bg: #555;
+  --button-hover: #666;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  transition: background 0.4s, color 0.4s;
+}
+
+header {
+  background: var(--header-bg);
+  padding: 20px;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#toggle-theme {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  color: var(--text);
+}
+
+#toggle-theme:hover {
+  transform: scale(1.1);
+}
+
+main {
+  max-width: 600px;
+  margin: 30px auto;
+  background: var(--card-bg);
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.4s;
+}
+
+.descricao {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+  transition: transform 0.2s;
+}
+
+.item label {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Remove setas do input number */
+.item input::-webkit-inner-spin-button,
+.item input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.item input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.item input {
+  width: 100px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: right;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.resultado {
+  font-size: 0.9rem;
+  margin-top: 5px;
+  color: var(--text);
+  width: 100%;
+}
+
+.final {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 25px;
+  background: var(--highlight);
+  padding: 10px;
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+/* ======= Animação do destaque ======= */
+@keyframes destaque {
+  0% { box-shadow: 0 0 0px 0px rgba(255, 215, 0, 0.5); transform: scale(1); }
+  50% { box-shadow: 0 0 20px 5px rgba(255, 215, 0, 0.7); transform: scale(1.03); }
+  100% { box-shadow: 0 0 0px 0px rgba(255, 215, 0, 0.5); transform: scale(1); }
+}
+
+.melhor-opcao {
+  animation: destaque 1s ease-in-out;
+  border-radius: 8px;
+}
+    
